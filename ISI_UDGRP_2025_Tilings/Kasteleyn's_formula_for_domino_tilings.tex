@@ -1,0 +1,166 @@
+\documentclass{beamer}
+%theme
+\usetheme{Berlin}
+\usecolortheme{default}
+\setbeamertemplate{theorems}[numbered]
+\setbeamertemplate{caption}[numbered]
+%packages
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx,physics,amssymb,amsmath,amsthm}
+\usepackage[style=authoryear, backend=biber]{biblatex}
+\usepackage{tikz}
+\usetikzlibrary{matrix}
+\addbibresource{references.bib}
+%Numbering
+\numberwithin{theorem}{section} 
+\theoremstyle{definition}
+\newtheorem{remark}{Remark}
+%starts here
+\title{Kasteleyn's formula for domino tilings of rectangles}
+\subtitle{- presentation on Eric Stucky's expository paper -}
+\author{Arkaraj Mukherjee}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+    \maketitle
+\end{frame}
+
+\begin{frame}
+    \frametitle{Contents}
+    \tableofcontents
+\end{frame}
+
+% ==========================================
+% SECTION 1: Overview
+% ==========================================
+\section{Overview}
+\begin{frame}
+    This is a presentation on Kasteleyn's formula for the number of domino tilings of a $m\times n$ rectangle heavily based on [\cite{stucky2015}]. 
+    Although there are many connections between this and physics, we will not cover these here and instead direct the interested readers to [\cite{kasteleyn1961}]. 
+    The key result we prove is : If $T(m,n)$ is the set of tilings of a $m\times n$ rectangle (wlog. $m$ is even) and $H(\pi),V(\pi)$ the number of horizontal and vertical dominos in $\pi\in T(m,n)$ respectively, then for any complex $x,y$ we have
+    $$\sum_{\pi\in T(m,n)}x^{H(\pi)}y^{V(\pi)}=2^{\frac{mn}{2}}\prod_{k=1}^{m/2}\prod_{l=1}^{n}\qty(x^2\cos^2\frac{\pi k}{m+1}+y^2\cos^2\frac{\pi l}{m+1})^{\frac{1}{2}}$$
+    If we set $x=y=1$ this gives us the number of such tilings.
+\end{frame}
+\begin{frame}
+    The proof is seperated into two major parts. 
+    In the first we deal with the combinatorial aspect where we translate the problem of counting tilings into that of counting specific permutations allowing us to use matrix methods\footnote[1]{
+    We have already seen things like the State matrix in the same context, tilings of hexagons with lozenges using determinants etc.
+    } especially Pfaffians which deem to be just what we need here. 
+    For a specific $mn\times mn$ matrix $D$, the expression in the main theorem will be $\operatorname{Pf}(D)$. 
+    We rely on the identity $\operatorname{Pf}(K)^2=\det(K)$ where $K$ is skew symmetric of even dimension. 
+    First we will come up with a \textit{guess} $D'$, which gives $\operatorname{Per}(D')$ to be the expression we need but sadly the permanent is not as algebraically robust as determinants and we cannot calculate them as such, a big subpart of this part will be devoted to \textit{fixing} $D$ to get the right matrix. 
+    In the second part of the proof we will use kronecker products and (...left out till I read this...)
+\end{frame}
+
+% =========================================
+% SECTION 2: Bijection with some specific permutations
+% =========================================
+
+\section{Translation into counting permutations}
+
+\begin{frame}
+    As discussed above we will try to connect tilings with dominos to permutations on $[mn].$ 
+    We will identify the usual unit cells in the $m\times n$ rectangle with numbers from $[mn]$ using the lexicographic ordering, starting from the bottom left corner. 
+    For example, when $m=n=2$ we identify, 
+    $$(1,1)\leftrightarrow 1,(1,2)\leftrightarrow 2,(2,1)\leftrightarrow 3,(2,2)\leftrightarrow 4$$
+    Now we line all the dominos up and label both of their ends with adjacent numbers as follows: Label the ends of the first domino with $1$ and $2$, the second with $3$ and $4,\ldots$ upto $mn/2$ dominos. 
+    Then, we can associate to each tiling a permutation $\sigma$ on $[mn]$ which maps $k$ (some end of a domino) to the lexicographic rank of its position on the $m\times n$ rectangle. 
+\end{frame}
+\begin{frame}
+    It is easy to notice that a tiling can have multiple permutations corresponding to it (this is fixed over all tilings, finding how many corresponding permutations there are is a good exercise) and also that not every permutation corresponds to a tiling (if this weren't the case then this problem would be trivial), for example take $(2 4)$ on $[4]$. 
+    We seek some way to identify an unique permutation corresponding with some tilings, something \textit{canonical}. 
+    One way to do this is to put these restrictions on the permutations : $\sigma(2k-1)<\sigma(2k)$ and $\sigma(1)<\sigma(3)<\sigma(5)<\ldots$. 
+    These hand-wavingly make sense because flipping a domino should be immaterial to the number of tilings so its good to fix the higher label(equivalently both) and also that switching \textit{pairs} around just replaces two dominos which should also be immaterial - for example, on $[4]$ we see that $1234$ and $3412$ correspond to the exact same tiling.
+    Convince yourself that such permutations exist given any tiling, leaving uniqueness for exercise.
+\end{frame}
+
+% =========================================
+% SECTION 3: The Pfaffian
+% =========================================
+
+\section{The Pfaffian}
+
+\begin{frame}
+    \begin{definition}[Pfaffian]
+        For a $2n\times 2n$ skew symmetric matrix $A$, the pfaffian is defined as
+        $$\operatorname{Pf}(A):=\frac{1}{2^nn!}\sum_{\sigma\in S_{2n}}\operatorname{sgn}\prod_{i=1}^na_{\sigma(2i-1),\sigma(2i)}$$
+    \end{definition}
+    However, there is a way to write the pfaffian with lesser terms. Let $\Pi$ be the set of partitions of $[2n]$ into pairs.
+    For such a partition $\pi=\{\{i_1,j_1\},\ldots,\{i_n,j_n\}\}$ where $i_1<i_2<i_3<\ldots$ and $i_k<j_k$ for all $k$, let $\sigma_\pi$ be the permutation $i_1j_1i_2j_2\ldots$.
+    With the notation above, we claim that
+    $$\operatorname{Pf}(A)=\sum_{\pi\in\Pi}\operatorname{sgn}(\sigma_\pi)\prod_{i=1}^na_{\sigma_\pi(2i-1),\sigma_\pi(2i)}$$
+\end{frame}
+\begin{frame}
+    For a proof, notice that when the pairs in the partition are permuted and the elements in each pair also permuted, these correspond to $2^nn!$ permutations and that the summand remains constant upon switching position of two elements in a pair as $A$ is skew symmetric and it stays constant over as the sign, being a homomorphism on $S_{2n}$, leads is multiplied by 
+    $$\operatorname{sgn}((2i-1,2j-1)(2i,2j))=\operatorname{sgn}((2i-1,2j-1))\cdot\operatorname{sgn}((2i,2j))$$
+    $$=(-1)\cdot(-1)=1$$
+    in cycle notation, when we switch the $i$-th and $j$-th pairs - making the summand stay constant all over these permutations and we are done.
+\end{frame}
+\begin{frame}
+    \begin{theorem}[spectral theorem for real skew symmetric matrices]
+        If $A$ is a $2n\times 2n$ real skew symmetric matrix then the spectrum is of form $\{\pm i\lambda_k\}_{1\leq k\leq n}$ and $A$ is orthogonally similar to a block diagonal matrix $H$ with diagonal entries being $H_1,\ldots,H_n$ with
+        \begin{center}
+            $H_k:=\begin{pmatrix}
+                0 & \lambda_k\\ -\lambda_k & 0
+            \end{pmatrix}$
+        \end{center}
+    \end{theorem}
+    \begin{proof}
+        The structure of the spectrum is a result from basic linear algebra. 
+        As skew symmetric matrices are normal we can diagonalise them into $D:=Q^{\top}AQ=\operatorname{diag}(i\lambda_1,-i\lambda_1,\ldots)$ with $Q$ orthogonal. Let,
+        \begin{center}
+            $P:=\frac{1}{2}\cdot\begin{pmatrix}
+            1 & 1 \\ i & -i
+        \end{pmatrix}$
+    \end{center}
+    \end{proof}
+\end{frame}
+\begin{frame}
+    \begin{proof}[(continued)]
+        This is an orthogonal matrix. Let $L=\operatorname{diag}(P,P,\ldots)$ be a $2n\times 2n$ block diagonal matrix, this is also orthogonal and we see that
+        $$L^\top HL =\operatorname{diag}(P^{\top},P^{\top},\ldots)\operatorname{diag}(H_1,H_2,\ldots)\operatorname{diag}(P,P,\ldots)$$
+        $$=\operatorname{diag}(P^\top H_1 P,P^\top H_2 P,\ldots)=\operatorname{diag}(\operatorname{diag}(i\lambda_1,-i\lambda_1),\ldots)=D$$
+        Thus, $A=Q^{\top}L^{\top}HLQ$ rearranging which we can conclude as the product of two orthogonal matrices is orthogonal.
+    \end{proof}
+    \begin{theorem}
+        For any $2n\times 2n$ skew symmetric matrix $A$ and arbitrary matrix $B$ we have, $\operatorname{Pf}(BAB^\top)=\operatorname{Pf}(A)$.
+    \end{theorem}
+\end{frame}
+\begin{frame}
+    For our use case however $B$ is invertible and this version of the theorem can be proved via considering $B$ to be a product of elementary matrices and using some of the determinant-like properties which can be found on wikipedia. 
+    Now we state the most important theorem we will use regarding pfaffians.
+    \begin{theorem}[T. Muir. 1960]
+        If $A$ is $2n\times 2n$ and skew symmetric then $\operatorname{Pf}(A)^2=\det(A)$
+    \end{theorem}
+    \begin{proof}
+        Show that $P\in\mathbb R[x_1,\ldots,x_m]$ and $P(\mathbb R^m)=\{0\}\implies P\equiv 0$ as an exercise.
+        Thus it suffices to prove this theorem for all real matrices.
+        We have seen that we can write $A=QHQ^\top$ with $H$ the same as above, for some $Q$. 
+        Then, $\operatorname{Pf}(A)^2=\operatorname{Pf}(H)^2\det(Q)^2=\det(A)^2$ with the second last equality left as another exercise.
+    \end{proof}
+\end{frame}
+
+% =========================================
+% SECTION 4: Constructing the matrix 
+% =========================================
+
+\section{Constructing the matrix}
+
+\begin{frame}
+    We first try to get a glimpse of the possible structure of $D$, only then rectifying our guess to the final matrix $D$ which will give us $\operatorname{Pf}(D)=|T(m,n)|$.
+
+\end{frame}
+
+% =========================================
+% SECTION ?: References
+% =========================================
+\section{References}
+
+\begin{frame}[allowframebreaks]
+    \frametitle{References}
+    \printbibliography
+\end{frame}
+
+\end{document}

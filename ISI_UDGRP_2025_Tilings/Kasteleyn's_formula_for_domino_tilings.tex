@@ -6,7 +6,7 @@
 \setbeamertemplate{caption}[numbered]
 %packages
 \usepackage[utf8]{inputenc}
-\usepackage{graphicx,physics,amssymb,amsmath,amsthm}
+\usepackage{graphicx,physics,amssymb,amsmath,amsthm,mathdots}
 \usepackage[style=authoryear, backend=biber]{biblatex}
 \usepackage{tikz}
 \usetikzlibrary{matrix}
@@ -18,7 +18,7 @@
 %starts here
 \title{Kasteleyn's formula for domino tilings of rectangles}
 \subtitle{- presentation on Eric Stucky's expository paper -}
-\author{Arkaraj Mukherjee}
+\author{Darn Dalmatian}
 \date{\today}
 
 \begin{document}
@@ -35,7 +35,7 @@
 % ==========================================
 % SECTION 1: Overview
 % ==========================================
-\section{Overview}
+\section[ove]{Overview}
 \begin{frame}
     This is a presentation on Kasteleyn's formula for the number of domino tilings of a $m\times n$ rectangle heavily based on [\cite{stucky2015}]. 
     Although there are many connections between this and physics, we will not cover these here and instead direct the interested readers to [\cite{kasteleyn1961}]. 
@@ -44,10 +44,10 @@
     If we set $x=y=1$ this gives us the number of such tilings.
 \end{frame}
 \begin{frame}
-    The proof is seperated into two major parts. 
+    The proof is separated into two major parts. 
     In the first we deal with the combinatorial aspect where we translate the problem of counting tilings into that of counting specific permutations allowing us to use matrix methods\footnote[1]{
     We have already seen things like the State matrix in the same context, tilings of hexagons with lozenges using determinants etc.
-    } especially Pfaffians which deem to be just what we need here. 
+    } especially Pfaffians, which seem to be just what we need here. 
     For a specific $mn\times mn$ matrix $D$, the expression in the main theorem will be $\operatorname{Pf}(D)$. 
     We rely on the identity $\operatorname{Pf}(K)^2=\det(K)$ where $K$ is skew symmetric of even dimension. 
     First we will come up with a \textit{guess} $D'$, which only differs from $D$ by some signs but a hardest problem of this part is constructing $D$ itself, signs included.
@@ -55,10 +55,10 @@
 \end{frame}
 
 % =========================================
-% SECTION 2: Bijection with some specific permutations
+% SECTION 2: Translation into counting permutations
 % =========================================
 
-\section{Translation into counting permutations}
+\section[trans]{Translation into counting permutations}
 
 \begin{frame}
     As discussed above we will try to connect tilings with dominos to permutations on $[mn].$ 
@@ -80,23 +80,23 @@
 % SECTION 3: Constructing the matrix 
 % =========================================
 
-\section{Constructing the matrix}
+\section[construct]{Constructing the matrix}
 
 \begin{frame}
     We first try to get a glimpse of the possible structure of $D$, only then rectifying our guess to the final matrix $D$ which will give us $\operatorname{Pf}(D)=|T(m,n)|$. 
     The Pfaffian goes through all the permutations which could correspond to some tiling, but we want a way to filter out the \textit{bad} permutations.
-    A way to do this is by setting all the entries $D_{i,j}$ where $i,j$ can not be labels on a singular domino in some cannonical permutation, to zero.
+    A way to do this is by setting all the entries $D_{i,j}$ where $i,j$ can not be labels on a singular domino in some canonical permutation, to zero.
     Then the only non zero entries could be :
     \begin{enumerate}
         \item horizontal dominos: clearly the larger even label must lie exactly to the right of the smaller odd label, unless the odd label is on the rightmost edge, in which case it can not correspond to a domino and we set it to zero.
-        \item vertical dominos: here, the even label is similarly always directly above the smaller odd one, unless this odd one is on the top most edge.
+        \item vertical dominos: here, the even label is similarly always directly above the smaller odd one, unless this odd one is on the topmost edge.
     \end{enumerate}
 \end{frame}
 
 \begin{frame}
     Thus combining these with the definition of permutations we are interested in, we take the following guess at $D$, namely $D'$: the $(i,j)$-th entry is nonzero if 
     \begin{itemize}
-        \item $i$ is odd, $j=i+1$ and $m\not|i$ (not on the right edge basically.)
+        \item $i$ is odd, $j=i+1$ and $m\nmid i$ (not on the right edge basically.)
         \item $j=i+m$ (directly above) and $i\leq mn-m$ (not on the topmost row).
     \end{itemize}
     Now if we make the entries which correspond to horizontal dominos $x$ and the vertical ones $y$ respectively, then
@@ -115,7 +115,7 @@
     It is proved in [\cite{stucky2015}] that the sign of the permutation corresponding to a tiling is the number of dominos inside odd columns, thus we can nullify the sign upfront by assigning $-y$ to the entries corresponding to these dominos, instead of $y$. 
     The proof is totally elementary but best explained with visuals which I do not feel the need to reproduce here so interested readers can see it for themselves in [\cite{stucky2015}]. Compiling everything we know about $D$ till now, heres a full description of the nonzero entries:
     \begin{itemize}
-        \item $D_{i,i+1}=x$ and $D_{i+1,i}=-x$ for $1\leq i\leq mn$ such that $m\not|i$.
+        \item $D_{i,i+1}=x$ and $D_{i+1,i}=-x$ for $1\leq i\leq mn$ such that $m\nmid i$.
         \item $D_{2i,2i+m}=y$ and $D_{2i+m,2i}=-y$ for $1\leq i\leq m(n-1)/2$
         \item $D_{2i-1,2i-1+m}=-y$ and $D_{2i-1+m,2i-1}=y$ for $2\leq 2i\leq m(n-1)+1\iff 1\leq i\leq m(n-1)/2$
     \end{itemize}
@@ -123,14 +123,24 @@
 \begin{frame}
     With this construction we see that $D$ is skew symmetric and
     $$\operatorname{Pf}(D)=\sum_{\pi\in T(m,n)}x^{H(\pi)}y^{V(\pi)}$$
-    all that is left for us to do now is grind through the algebra and calculate $\det(A)$ as its directly related to the pfaffian. 
+    By looking at the entries we can see that, in block form
+    $$D=
+    \begin{bmatrix}
+        xH_m & yV_m & & & & \\
+        -yV_m & xH_m & yV_m & & & \\
+         & -yV_m & xH_m & & & \\
+         & & & \ddots & & \\
+         & & & & xH_m & yV_m \\
+         & & & & -yV_m & xH_m
+    \end{bmatrix}$$
+    where $V_k$ and is diagonal with $(V_k)_{ii}=(-1)^{i}$ and $H_k$ has all $1$s on the super and $-1$s on the sub diagonal respectively, every other entry being zero. 
+    $V_k$ correspond to vertical dominos and $H_k$ to horizontal.
 \end{frame}
-
 % =========================================
 % SECTION 4: The Pfaffian
 % =========================================
 
-\section{The Pfaffian}
+\section[pfaffian]{The Pfaffian}
 
 \begin{frame}
     \begin{definition}[Pfaffian]
@@ -196,18 +206,105 @@
 % SECTION 5: representing the matrix using kronecker products 
 % =========================================
 
-\section{Representing the matrix with kronecker products}
+\section[kronecker]{Representing the matrix with kronecker products}
 
 \begin{frame}
-    \begin{definition}[kronecker product or, tensor product\footnote{There are connections aplenty between this and the conventional Tensor products but here this is used interchangably with the kronecker product}]
+    \begin{definition}[kronecker product or, tensor product\footnote{There are connections aplenty between this and the conventional Tensor products but here this is used interchangeably with the kronecker product}]
         If $A$ is $p\times q$ and $B$ is $m\times n$, we define $(A\otimes B)_{ij}:=a_{ij}\cdot B$ in block form. This is a $mp\times nq$ matrix.
     \end{definition}
+    If $A,B$ are $m\times m$ and $C,D$ are $n\times n$ (it is enough to consider only square matrices for our case) then,
+    \begin{itemize}
+        \item $(A+B)\otimes C=A\otimes C+B\otimes C$
+        \item $C\otimes(A+B)=C\otimes A+C\otimes B$
+        \item $(A\otimes C)(B\otimes D)=(AB)\otimes(CD)$
+        \item for invertible $M,N$ we have $(M\otimes N)^{-1}=M^{-1}\otimes N^{-1}$
+    \end{itemize}
+    proofs are left as an exercise.
 \end{frame}
-
+\begin{frame}
+Using these, notice that we can write $D=I_n\otimes xH_m+H_n\otimes yV_m$. 
+As $H_k$ are skew symmetric, they are normal and hence diagonalisable. 
+Suppose we have $U_k^{-1}H_kU_k=\Lambda_k$, a diagonal matrix. 
+To get more information about the determinant of $D$, its natural to try to diagonalise it or atleast block diagonalise it. 
+We try to diagonalise the $H_k$ in our expression by considering $\tilde{\Lambda}:=(U_n\otimes U_m)^{-1}D(U_n\otimes U_m)$, where $U_m$ hits the $H_m$ on the right term and $U_n$ the $H_n$ on the left. 
+By using the properties mentioned above we find that 
+$$\tilde{\Lambda}=(U_n\otimes U_m)^{-1}D(U_n\otimes U_m)=I_n\otimes x\Lambda_m+\Lambda_n\otimes yU_m^{-1}V_mU_m$$
+this is clearly in block diagonal form as $I_n,\Lambda_n$ are both diagonal, but we still have no clue about $U_m^{-1}V_mU_m.$
+\end{frame}
+\section[eval]{Evaluating $U_m^{-1}V_mU_m$}
+\begin{frame}
+    Using cofactor expansion on the determinant we see that $\chi_{H_k}(x)=x\cdot\chi_{H_{k-1}}(x)+\chi_{H_{k-2}}(x)$ with $\chi_{H_2}=x^2+1$ and $\chi_{H_1}:=x$ to make the recurrence work. 
+    We can solve this linear recurrence to get that,
+    $$\chi_{H_k}(x)=\frac{(x+\sqrt{x^2+4})^{k+1}-(x-\sqrt{x^2+4})^{k+1}}{2^{k+1}\sqrt{x^2+4}}$$
+    From this we can find the roots (thus the eigenvalues) to be $\lambda^{(k)}_j=2i\cos(j\pi/(k+1))$ for $j=1,\ldots,k$. 
+    We can solve the system $\lambda^{(k)}_j\cdot v=H_kv$ for eigenvectors $v$ as well, this reduces to finding another term in a linear recurrence and after some algebra we get an eigenvector $v^{(k)}_j=(i^m\sin(mj\pi/(k+1)))_{1\leq m\leq k}^\top$ for the eigenvalue $\lambda_j^{(k)}$.
+    Now as all the eigenvalues were distinct, the corresponding eigenvectors are known to be linearly independent and we can form a change of basis matrix $U_m$ with $(U_m)_{*,j}:=v^{(k)}_j$. 
+    Then we see that $\Lambda_k=U_m^{-1}H_kU_m$ so we found what we wanted.
+\end{frame}
+\begin{frame}
+    Calculating $V_mU_m$ is easy, but working with $U_m^{-1}$ probably not so much. But we can notice that,
+    $$(V_mU_m)_{k,l}=(-1)^ki^k\sin\qty(\frac{\pi kl}{m+1})=(U_m)_{k,m+1-l}$$
+    with some trigonometry, what this tells us is that $V_mU_m=U_mJ_m$ where $J_m$ is the anti-diagonal identity matrix (what we get by flipping $I_m$ from left to right.) Thus, simplifying everything we get,
+    $$\tilde{\Lambda}=I_n\otimes x\Lambda_m+\Lambda_n\otimes yJ_m$$
+    This is block diagonal with $m\times m$ blocks. The block with its bottom right entry being at the $(km,km)$-th position is thus
+    $$x\Lambda_m+y\lambda^{(n)}_kJ_m$$
+\end{frame}
+\section{manipulating the blocks}
+\begin{frame}
+    Using this we see that the $k$-th block is
+$$\begin{bmatrix}
+    x\lambda_1^{(m)} & & & & & & y\lambda_k^{(n)} \\
+     & x\lambda_2^{(m)} & & & & y\lambda_k^{(n)} & \\
+     & & \ddots & & \iddots & & \\
+     & & & x\lambda_{m/2}^{(m)} & y\lambda_k^{(n)} & & \\
+     & & & y\lambda_k^{(n)} & x\lambda_{m/2+1}^{(m)} & & \\
+     & & \iddots & & \ddots & & \\
+     & y\lambda_k^{(n)} & & & & x\lambda_{m-1}^{(m)} & \\
+    y\lambda_k^{(n)} & & & & & & x\lambda_{m}^{(m)}
+\end{bmatrix}$$
+As $m$ is even, both the diagonals are \textit{supposed to miss each other.}
+\end{frame}
+\begin{frame}
+    Firstly the determinant of $\tilde{\Lambda}$ is the product of those of these blocks, this is standard. 
+    Focus on the $k$-th block now. 
+    Swap rows $2$ and $m$, then swap columns $2$ and $m$ hence making the top-left and bottom-right $2\times 2$ submatrix
+    $$\begin{bmatrix}
+        x\lambda_1^{(m)} & y\lambda_k^{(n)} \\
+        y\lambda_k^{(n)} & x\lambda_{m}^{(m)}
+    \end{bmatrix},\hspace{5pt}
+    \begin{bmatrix}
+        x\lambda_{m-1}^{(m)} & y\lambda_k^{(n)} \\
+        y\lambda_k^{(n)} & x\lambda_2^{(m)}
+    \end{bmatrix}$$
+    respectively. 
+    We can keep repeating this swapping on the smaller and smaller blocks in the middle until the matrix is a diagonal block matrix with $2\times 2$ blocks. The blocks left will be
+    $$\begin{bmatrix}x\lambda^{(m)}_j & y\lambda_k^{(n)} \\ y\lambda_k^{(n)} & x\lambda^{(m)}_{m+1-j}\end{bmatrix}\text{ for }j=1,2,\ldots,m/2$$
+    And as, for every column swap we did exactly one row swap, the sign of the determinant of this $m\times m$ block does not change.
+\end{frame}
+\section[final]{final result}
+\begin{frame}
+    Now we can find the determinant of matrix $\tilde{\Lambda}$ as,
+    \begin{align*}
+        \det\tilde{\Lambda} &= \prod_{k=1}^n\prod_{j=1}^{m/2}\det\qty(\begin{bmatrix}x\lambda^{(m)}_j & y\lambda_k^{(n)} \\ y\lambda_k^{(n)} & x\lambda^{(m)}_{m+1-j}\end{bmatrix})
+        \\
+        &= \prod_{k=1}^n\prod_{j=1}^{m/2}\qty(x^2\lambda_j^{(m)}\lambda^{(m)}_{m+1-j}-y^2\lambda_k^{(n)}\lambda_k^{(n)}) 
+        \\
+        &= \prod_{k=1}^n\prod_{j=1}^{m/2}\qty(4x^2\cos^2\frac{\pi j}{m+1}+4y^2\cos^2\frac{\pi k}{n+1})
+    \end{align*}
+    as $\cos(\pi-\theta)=-\cos\theta$.
+    And using Muir's result we can link all of this back to the Pfaffian $$\operatorname{Pf}(D)^2=\det(D)=\det(U_n\otimes U_m)\tilde{\Lambda}(U_n\otimes U_m)^{-1}=\det\tilde{\Lambda}$$
+\end{frame}
+\begin{frame}
+    Thus, using the result from section $3$ and this we get,
+    \begin{align*} 
+        \sum_{\pi\in T(m,n)}x^{H(\pi)}y^{V(\pi)} &= \operatorname{Pf}(D) \\ &= \sqrt{\det\tilde{\Lambda}} \\ &= 2^{mn/2}\prod_{k=1}^n\prod_{j=1}^{m/2}\qty(\cos^2\frac{\pi j}{m+1}+\cos^2\frac{\pi k}{n+1})^{\frac{1}{2}}
+    \end{align*}
+    and we are finally done!
+\end{frame}
 % =========================================
 % SECTION ?: References
 % =========================================
-\section{References}
+\section[refs]{References}
 
 \begin{frame}[allowframebreaks]
     \frametitle{References}

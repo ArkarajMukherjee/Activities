@@ -50,7 +50,7 @@
     } especially Pfaffians which deem to be just what we need here. 
     For a specific $mn\times mn$ matrix $D$, the expression in the main theorem will be $\operatorname{Pf}(D)$. 
     We rely on the identity $\operatorname{Pf}(K)^2=\det(K)$ where $K$ is skew symmetric of even dimension. 
-    First we will come up with a \textit{guess} $D'$, which gives $\operatorname{Per}(D')$ to be the expression we need but sadly the permanent is not as algebraically robust as determinants and we cannot calculate them as such, a big subpart of this part will be devoted to \textit{fixing} $D$ to get the right matrix. 
+    First we will come up with a \textit{guess} $D'$, which only differs from $D$ by some signs but a hardest problem of this part is constructing $D$ itself, signs included.
     In the second part of the proof we will use kronecker products and (...left out till I read this...)
 \end{frame}
 
@@ -77,7 +77,57 @@
 \end{frame}
 
 % =========================================
-% SECTION 3: The Pfaffian
+% SECTION 3: Constructing the matrix 
+% =========================================
+
+\section{Constructing the matrix}
+
+\begin{frame}
+    We first try to get a glimpse of the possible structure of $D$, only then rectifying our guess to the final matrix $D$ which will give us $\operatorname{Pf}(D)=|T(m,n)|$. 
+    The Pfaffian goes through all the permutations which could correspond to some tiling, but we want a way to filter out the \textit{bad} permutations.
+    A way to do this is by setting all the entries $D_{i,j}$ where $i,j$ can not be labels on a singular domino in some cannonical permutation, to zero.
+    Then the only non zero entries could be :
+    \begin{enumerate}
+        \item horizontal dominos: clearly the larger even label must lie exactly to the right of the smaller odd label, unless the odd label is on the rightmost edge, in which case it can not correspond to a domino and we set it to zero.
+        \item vertical dominos: here, the even label is similarly always directly above the smaller odd one, unless this odd one is on the top most edge.
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}
+    Thus combining these with the definition of permutations we are interested in, we take the following guess at $D$, namely $D'$: the $(i,j)$-th entry is nonzero if 
+    \begin{itemize}
+        \item $i$ is odd, $j=i+1$ and $m\not|i$ (not on the right edge basically.)
+        \item $j=i+m$ (directly above) and $i\leq mn-m$ (not on the topmost row).
+    \end{itemize}
+    Now if we make the entries which correspond to horizontal dominos $x$ and the vertical ones $y$ respectively, then
+    $$\prod_{i=1}^{mn/2}D_{\sigma(2i-1),\sigma(2i)}=
+    \begin{cases}
+        x^{H(T)}y^{V(T)}\text{ if }\sigma\text{ corresponds to some tiling } $T$\\
+        0\text{ otherwise} 
+    \end{cases}$$
+    thus, using the notation developed prior to this we have
+    $$\operatorname{Pf}(D')=\sum_{\pi\in T(m,n)}\operatorname{sgn}(\sigma_\pi)x^{H(\pi)}y^{V(\pi)}$$
+\end{frame}
+
+\begin{frame}
+    This was a very good guess but it doesn't work as a sign is multiplied to every summand.
+    If we want to alter $D'$ and make it work, then the most natural course of action is to analyse $\operatorname{sgn}(\sigma_\pi)$ for tilings $\pi$. 
+    It is proved in [\cite{stucky2015}] that the sign of the permutation corresponding to a tiling is the number of dominos inside odd columns, thus we can nullify the sign upfront by assigning $-y$ to the entries corresponding to these dominos, instead of $y$. 
+    The proof is totally elementary but best explained with visuals which I do not feel the need to reproduce here so interested readers can see it for themselves in [\cite{stucky2015}]. Compiling everything we know about $D$ till now, heres a full description of the nonzero entries:
+    \begin{itemize}
+        \item $D_{i,i+1}=x$ and $D_{i+1,i}=-x$ for $1\leq i\leq mn$ such that $m\not|i$.
+        \item $D_{2i,2i+m}=y$ and $D_{2i+m,2i}=-y$ for $1\leq i\leq m(n-1)/2$
+        \item $D_{2i-1,2i-1+m}=-y$ and $D_{2i-1+m,2i-1}=y$ for $2\leq 2i\leq m(n-1)+1\iff 1\leq i\leq m(n-1)/2$
+    \end{itemize}
+\end{frame}
+\begin{frame}
+    With this construction we see that $D$ is skew symmetric and
+    $$\operatorname{Pf}(D)=\sum_{\pi\in T(m,n)}x^{H(\pi)}y^{V(\pi)}$$
+    all that is left for us to do now is grind through the algebra and calculate $\det(A)$ as its directly related to the pfaffian. 
+\end{frame}
+
+% =========================================
+% SECTION 4: The Pfaffian
 % =========================================
 
 \section{The Pfaffian}
@@ -85,7 +135,7 @@
 \begin{frame}
     \begin{definition}[Pfaffian]
         For a $2n\times 2n$ skew symmetric matrix $A$, the pfaffian is defined as
-        $$\operatorname{Pf}(A):=\frac{1}{2^nn!}\sum_{\sigma\in S_{2n}}\operatorname{sgn}\prod_{i=1}^na_{\sigma(2i-1),\sigma(2i)}$$
+        $$\operatorname{Pf}(A):=\frac{1}{2^nn!}\sum_{\sigma\in S_{2n}}\operatorname{sgn}(\sigma)\prod_{i=1}^na_{\sigma(2i-1),\sigma(2i)}$$
     \end{definition}
     However, there is a way to write the pfaffian with lesser terms. Let $\Pi$ be the set of partitions of $[2n]$ into pairs.
     For such a partition $\pi=\{\{i_1,j_1\},\ldots,\{i_n,j_n\}\}$ where $i_1<i_2<i_3<\ldots$ and $i_k<j_k$ for all $k$, let $\sigma_\pi$ be the permutation $i_1j_1i_2j_2\ldots$.
@@ -143,14 +193,15 @@
 \end{frame}
 
 % =========================================
-% SECTION 4: Constructing the matrix 
+% SECTION 5: representing the matrix using kronecker products 
 % =========================================
 
-\section{Constructing the matrix}
+\section{Representing the matrix with kronecker products}
 
 \begin{frame}
-    We first try to get a glimpse of the possible structure of $D$, only then rectifying our guess to the final matrix $D$ which will give us $\operatorname{Pf}(D)=|T(m,n)|$.
-
+    \begin{definition}[kronecker product or, tensor product\footnote{There are connections aplenty between this and the conventional Tensor products but here this is used interchangably with the kronecker product}]
+        If $A$ is $p\times q$ and $B$ is $m\times n$, we define $(A\otimes B)_{ij}:=a_{ij}\cdot B$ in block form. This is a $mp\times nq$ matrix.
+    \end{definition}
 \end{frame}
 
 % =========================================

@@ -1,7 +1,6 @@
 \documentclass{beamer}
 %theme
-\usetheme{Berlin}
-\usecolortheme{default}
+\usetheme[block=fill, progressbar=foot]{moloch}
 \setbeamertemplate{theorems}[numbered]
 \setbeamertemplate{caption}[numbered]
 %packages
@@ -36,7 +35,7 @@
 % ==========================================
 % SECTION 1: Overview
 % ==========================================
-\section[ove]{Overview}
+\section[Overview]{Overview}
 \begin{frame}
     This is a presentation on Kasteleyn's formula [\cite{kasteleyn1961}]for the number of domino tilings of a $m\times n$ rectangle heavily based on [\cite{stucky2015}]. 
     The key result we prove is,
@@ -61,7 +60,7 @@
 % SECTION 2: Translation into counting permutations
 % =========================================
 
-\section[trans]{Translation into counting permutations}
+\section[Translation of the problem into counting permutations]{Translation into counting permutations}
 
 \begin{frame}
     As discussed above we will try to connect tilings with dominos to permutations on $[mn].$ 
@@ -82,7 +81,7 @@
 % =========================================
 % SECTION 3: The Pfaffian 
 % =========================================
-\section[pfaffian]{The Pfaffian}
+\section[The Pfaffian]{The Pfaffian}
 
 \begin{frame}
     \begin{definition}[Pfaffian]
@@ -111,21 +110,21 @@
     \end{theorem}
     \begin{proof}
         The structure of the spectrum is a result from basic linear algebra. 
-        As skew symmetric matrices are normal we can diagonalise them into $D:=Q^{\top}AQ=\operatorname{diag}(i\lambda_1,-i\lambda_1,\ldots)$ with $Q$ orthogonal. 
+        As skew symmetric matrices are normal we can diagonalise them into $D:=Q^{\top}AQ=\operatorname{diag}(i\lambda_1,-i\lambda_1,\ldots)$ with $Q$ orthogonal and thus it is sufficient to show that $D$ is orthogonally similar to $H$. 
         Suppose wlog $\lambda_1\neq 0$. 
-        Let $v=u+iv$ be a complex vector with $u,v$ being real, such that $Av=i\lambda v$ or, $Au+iAv=i\lambda u-\lambda v$ comparing the real and imaginary parts: $Au=-\lambda v,Av=\lambda u$. 
+        Let $v=u+iv$ be a complex vector with $u,v$ being real, such that $Av=i\lambda v$ or, $Au+iAv=i\lambda u-\lambda v$ comparing the real and imaginary parts: $Au=-\lambda v,Av=\lambda u$. \renewcommand{\qedsymbol}{{}}
     \end{proof}
 \end{frame}
 \begin{frame}
-    \begin{proof}[(continued)]
+    \begin{proof}[continued]
         It can be shown that $u,v$ are orthogonal and have the same norm, thus we normalise them to orthonormal vectors $u',v'$. 
         Let $W:=\operatorname{Span}\{u',v'\}$, then clearly $AW\subseteq W$, let $\mathcal B=\{u',v'\}$ be its basis and we have 
-        $$[A]_{\mathcal B}^{\mathcal B}=\begin{bmatrix}0 & -\lambda\\ \lambda & 0\end{bmatrix}$$
+        $$\qty[A\vert_{W}]_{\mathcal B}^{\mathcal B}=\begin{bmatrix}0 & -\lambda\\ \lambda & 0\end{bmatrix}$$
         It can be shown that $AW^{\perp}\subseteq W^{\perp}$ and we can proceed doing this inductively on $W^{\perp}$. 
         After we are done, a suitable change of basis gives us $H$ and the change of basis matrix has all columns being real orthonormal vectors and is orthogonal.
     \end{proof}
     \begin{theorem}
-        For any $2n\times 2n$ skew symmetric matrix $A$ and arbitrary matrix $B$ we have, $\operatorname{Pf}(BAB^\top)=\operatorname{Pf}(A)$.
+        For any $2n\times 2n$ skew symmetric matrix $A$ and arbitrary matrix $B$ we have, $\operatorname{Pf}(BAB^\top)=\det(B)\operatorname{Pf}(A)$.
     \end{theorem}
 \end{frame}
 \begin{frame}
@@ -138,7 +137,7 @@
         It is known that $P\in\mathbb R[x_1,\ldots,x_m]$ and $P(\mathbb R^m)=\{0\}\implies P\equiv 0$ (the proof is left as an exercise. Hint: Try to induct on the degree of $P$).
         Thus it suffices to prove this theorem for all real matrices.
         We have seen that we can write $A=QHQ^\top$ with $H$ the same as above, for some $Q$. 
-        Then, $\operatorname{Pf}(A)^2=\operatorname{Pf}(H)^2\det(Q)^2=\det(A)^2$ with the second last equality left as another exercise.
+        Then, $\operatorname{Pf}(A)^2=\operatorname{Pf}(H)^2\det(Q)^2=\det(A)$ with the last equality left as another exercise.
     \end{proof}
 \end{frame}
 
@@ -146,7 +145,7 @@
 % SECTION 4: Constructing The Matrix 
 % =========================================
 
-\section[construct]{Constructing the matrix}
+\section[Constructing the matrix]{Constructing the matrix}
 
 \begin{frame}
     We first try to get a glimpse at the possible structure of $D$, only then rectifying our guess to the final matrix $D$ which will give us $\operatorname{Pf}(D)=|T(m,n)|$. 
@@ -207,7 +206,7 @@
 % SECTION 5: representing the matrix using kronecker products 
 % =========================================
 
-\section[kronecker]{Representing the matrix with kronecker products}
+\section[Representing the matrix using Kronecker products]{Representing the matrix with kronecker products}
 
 \begin{frame}
     \begin{definition}[kronecker product or, tensor product\footnote{There are connections aplenty between this and the conventional Tensor products but here this is used interchangeably with the kronecker product}]
@@ -233,7 +232,12 @@ $$\tilde{\Lambda}=(U_n\otimes U_m)^{-1}D(U_n\otimes U_m)=I_n\otimes x\Lambda_m+\
 this is clearly in block diagonal form as $I_n,\Lambda_n$ are both diagonal and of the same dimension. 
 We will now try to figure out what $U_m^{-1}V_mU_m$ is.
 \end{frame}
-\section[eval]{Evaluating $U_m^{-1}V_mU_m$}
+
+% =========================================
+% SECTION 6: Evaluating U_m^-1 V_m U_m
+% =========================================
+
+\section[Evaluating $U_m^{-1}V_mU_m$]{Evaluating $U_m^{-1}V_mU_m$}
 \begin{frame}
     Using cofactor expansion on the determinant we see that $\chi_{H_k}(x)=x\cdot\chi_{H_{k-1}}(x)+\chi_{H_{k-2}}(x)$ with $\chi_{H_2}=x^2+1$ and $\chi_{H_1}:=x$ to make the recurrence work. 
     We can solve this linear recurrence to get that,
@@ -251,7 +255,12 @@ We will now try to figure out what $U_m^{-1}V_mU_m$ is.
     This is block diagonal with $m\times m$ blocks. The block with its bottom right entry being at the $(km,km)$-th position is thus
     $$x\Lambda_m+y\lambda^{(n)}_kJ_m$$
 \end{frame}
-\section{manipulating the blocks}
+
+% =========================================
+% SECTION 7: Manipulating the blocks
+% =========================================
+
+\section{Manipulating the blocks}
 \begin{frame}
     Using this we see that the $k$-th block is
 $$\begin{bmatrix}
@@ -283,7 +292,10 @@ As $m$ is even, both the diagonals are \textit{supposed to miss each other.}
     $$\begin{bmatrix}x\lambda^{(m)}_j & y\lambda_k^{(n)} \\ y\lambda_k^{(n)} & x\lambda^{(m)}_{m+1-j}\end{bmatrix}\text{ for }j=1,2,\ldots,m/2$$
     And as, for every column swap we did exactly one row swap, the sign of the determinant of this $m\times m$ block does not change.
 \end{frame}
-\section[final]{final result}
+% =========================================
+% SECTION 8: Putting it all together
+% =========================================
+\section[Putting it all together]{Putting it all together}
 \begin{frame}
     Now we can find the determinant of matrix $\tilde{\Lambda}$ as,
     \begin{align*}
@@ -294,11 +306,11 @@ As $m$ is even, both the diagonals are \textit{supposed to miss each other.}
         &= \prod_{k=1}^n\prod_{j=1}^{m/2}\qty(4x^2\cos^2\frac{\pi j}{m+1}+4y^2\cos^2\frac{\pi k}{n+1})
     \end{align*}
     as $\cos(\pi-\theta)=-\cos\theta$.
-    And using Muir's result we can link all of this back to the Pfaffian :
+    Now, using Muir's result we can link all of this back to the Pfaffian :
     $$\operatorname{Pf}(D)^2=\det(D)=\det((U_n\otimes U_m)\tilde{\Lambda}(U_n\otimes U_m)^{-1})=\det\tilde{\Lambda}$$
 \end{frame}
 \begin{frame}
-    Thus, using the result from section $3$ and this we get,
+    With what we have done so far, we have
     \begin{align*} 
         \sum_{\pi\in T(m,n)}x^{H(\pi)}y^{V(\pi)} &= \operatorname{Pf}(D) \\ &= \sqrt{\det\tilde{\Lambda}} \\ &= 2^{mn/2}\prod_{k=1}^n\prod_{j=1}^{m/2}\qty(x^2\cos^2\frac{\pi j}{m+1}+y^2\cos^2\frac{\pi k}{n+1})^{\frac{1}{2}}
     \end{align*}
@@ -308,10 +320,16 @@ As $m$ is even, both the diagonals are \textit{supposed to miss each other.}
 % SECTION 9: References
 % =========================================
 \section[]{References}
-
-\begin{frame}[allowframebreaks]
-    \frametitle{References}
+\begin{frame}
+    %\frametitle{References}
     \printbibliography
+\end{frame}
+
+\begin{frame}
+    \centering
+    \vfill
+    {\Huge Questions?}
+    \vfill
 \end{frame}
 
 \end{document}

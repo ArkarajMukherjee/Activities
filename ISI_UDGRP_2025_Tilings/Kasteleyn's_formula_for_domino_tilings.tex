@@ -38,11 +38,13 @@
 % ==========================================
 \section[ove]{Overview}
 \begin{frame}
-    This is a presentation on Kasteleyn's formula for the number of domino tilings of a $m\times n$ rectangle heavily based on [\cite{stucky2015}]. 
-    Although there are many connections between this and physics, we will not cover these here and instead direct the interested readers to [\cite{kasteleyn1961}]. 
-    The key result we prove is : If $T(m,n)$ is the set of tilings of a $m\times n$ rectangle (wlog. $m$ is even) and $H(\pi),V(\pi)$ the number of horizontal and vertical dominos in $\pi\in T(m,n)$ respectively, then for any complex $x,y$ we have
-    $$\sum_{\pi\in T(m,n)}x^{H(\pi)}y^{V(\pi)}=2^{\frac{mn}{2}}\prod_{k=1}^{m/2}\prod_{l=1}^{n}\qty(x^2\cos^2\frac{\pi k}{m+1}+y^2\cos^2\frac{\pi l}{n+1})^{\frac{1}{2}}$$
-    If we set $x=y=1$ this gives us the number of such tilings.
+    This is a presentation on Kasteleyn's formula [\cite{kasteleyn1961}]for the number of domino tilings of a $m\times n$ rectangle heavily based on [\cite{stucky2015}]. 
+    The key result we prove is,
+    \begin{theorem}[Kasteleyn, 1961]
+        If $T(m,n)$ is the set of tilings of a $m\times n$ rectangle (wlog. $m$ is even) and $H(\pi),V(\pi)$ the number of horizontal and vertical dominos in $\pi\in T(m,n)$ respectively, then for any complex $x,y$ we have
+        $$\sum_{\pi\in T(m,n)}x^{H(\pi)}y^{V(\pi)}=2^{\frac{mn}{2}}\prod_{k=1}^{m/2}\prod_{l=1}^{n}\qty(x^2\cos^2\frac{\pi k}{m+1}+y^2\cos^2\frac{\pi l}{n+1})^{\frac{1}{2}}$$
+    \end{theorem}
+    Setting $x=y=1$ gives us the number of such tilings.
 \end{frame}
 \begin{frame}
     The proof is separated into two major parts. 
@@ -72,36 +74,99 @@
 \begin{frame}
     It is easy to notice that a tiling can have multiple permutations corresponding to it (this is fixed over all tilings, finding how many corresponding permutations there are is a good exercise) and also that not every permutation corresponds to a tiling (if this weren't the case then this problem would be trivial), for example take $(2 4)$ on $[4]$. 
     We seek some way to identify an unique permutation corresponding with some tilings, something \textit{canonical}. 
-    One way to do this is to put these restrictions on the permutations : $\sigma(2k-1)<\sigma(2k)$ and $\sigma(1)<\sigma(3)<\sigma(5)<\ldots$. 
-    These hand-wavingly make sense because flipping a domino should be immaterial to the number of tilings so its good to fix the higher label(equivalently both) and also that switching \textit{pairs} around just replaces two dominos which should also be immaterial - for example, on $[4]$ we see that $1234$ and $3412$ correspond to the exact same tiling.
+    One way to do this is to put these restrictions on the permutations: $\sigma(2k-1)<\sigma(2k)$ and $\sigma(1)<\sigma(3)<\sigma(5)<\ldots$
+    These hand-wavingly make sense because flipping a domino should be immaterial to the number of tilings so we fix the higher label(equivalently both) and also that switching \textit{pairs} around just replaces two dominos which should also be immaterial - for example, if $m=n=2$ we see that $1234$ and $3412$ correspond to the exact same tiling.
     Convince yourself that such permutations exist given any tiling, leaving uniqueness for exercise.
 \end{frame}
 
 % =========================================
-% SECTION 3: Constructing the matrix 
+% SECTION 3: The Pfaffian 
+% =========================================
+\section[pfaffian]{The Pfaffian}
+
+\begin{frame}
+    \begin{definition}[Pfaffian]
+        For a $2n\times 2n$ skew symmetric matrix $A$, the pfaffian is defined as
+        $$\operatorname{Pf}(A):=\frac{1}{2^nn!}\sum_{\sigma\in S_{2n}}\operatorname{sgn}(\sigma)\prod_{i=1}^na_{\sigma(2i-1),\sigma(2i)}$$
+    \end{definition}
+    However, there is a way to write the pfaffian with lesser terms. Let $\Pi$ be the set of partitions of $[2n]$ into pairs.
+    For such a partition $\pi=\{\{i_1,j_1\},\ldots,\{i_n,j_n\}\}$ where $i_1<i_2<i_3<\ldots$ and $i_k<j_k$ for all $k$, let $\sigma_\pi$ be the permutation $i_1j_1i_2j_2\ldots$.
+    With the notation above, we claim that
+    $$\operatorname{Pf}(A)=\sum_{\pi\in\Pi}\operatorname{sgn}(\sigma_\pi)\prod_{i=1}^na_{\sigma_\pi(2i-1),\sigma_\pi(2i)}$$
+\end{frame}
+\begin{frame}
+    For a proof, notice that when the pairs in the partition are permuted and the elements in each pair also permuted, these correspond to $2^nn!$ permutations and that the summand remains constant upon switching position of two elements in a pair as $A$ is skew symmetric and it stays constant over permutation of these pairs as the sign, being a homomorphism on $S_{2n}$, is just multiplied by
+    $$\operatorname{sgn}((2i-1,2j-1)(2i,2j))=\operatorname{sgn}((2i-1,2j-1))\cdot\operatorname{sgn}((2i,2j))$$
+    $$=(-1)\cdot(-1)=1$$
+    in cycle notation, when we switch the $i$-th and $j$-th pairs - making the summand stay constant over these permutations and we are done.
+\end{frame}
+\begin{frame}
+    \begin{theorem}[spectral theorem for real skew symmetric matrices]
+        If $A$ is a $2n\times 2n$ real skew symmetric matrix then the spectrum is of form $\{\pm i\lambda_k\}_{1\leq k\leq n}$ and $A$ is orthogonally similar to a block diagonal matrix $H$ with diagonal entries being $H_1,\ldots,H_n$ with
+        \begin{center}
+            $H_k:=\begin{pmatrix}
+                0 & \lambda_k\\ -\lambda_k & 0
+            \end{pmatrix}$
+        \end{center}
+    \end{theorem}
+    \begin{proof}
+        The structure of the spectrum is a result from basic linear algebra. 
+        As skew symmetric matrices are normal we can diagonalise them into $D:=Q^{\top}AQ=\operatorname{diag}(i\lambda_1,-i\lambda_1,\ldots)$ with $Q$ orthogonal. 
+        Suppose wlog $\lambda_1\neq 0$. 
+        Let $v=u+iv$ be a complex vector with $u,v$ being real, such that $Av=i\lambda v$ or, $Au+iAv=i\lambda u-\lambda v$ comparing the real and imaginary parts: $Au=-\lambda v,Av=\lambda u$. 
+    \end{proof}
+\end{frame}
+\begin{frame}
+    \begin{proof}[(continued)]
+        It can be shown that $u,v$ are orthogonal and have the same norm, thus we normalise them to orthonormal vectors $u',v'$. 
+        Let $W:=\operatorname{Span}\{u',v'\}$, then clearly $AW\subseteq W$, let $\mathcal B=\{u',v'\}$ be its basis and we have 
+        $$[A]_{\mathcal B}^{\mathcal B}=\begin{bmatrix}0 & -\lambda\\ \lambda & 0\end{bmatrix}$$
+        It can be shown that $AW^{\perp}\subseteq W^{\perp}$ and we can proceed doing this inductively on $W^{\perp}$. 
+        After we are done, a suitable change of basis gives us $H$ and the change of basis matrix has all columns being real orthonormal vectors and is orthogonal.
+    \end{proof}
+    \begin{theorem}
+        For any $2n\times 2n$ skew symmetric matrix $A$ and arbitrary matrix $B$ we have, $\operatorname{Pf}(BAB^\top)=\operatorname{Pf}(A)$.
+    \end{theorem}
+\end{frame}
+\begin{frame}
+    For our use case however $B$ is invertible and this version of the theorem can be proved via considering $B$ to be a product of elementary matrices and using some of the determinant-like properties which can be found on wikipedia. 
+    Now we state the most important theorem we will use regarding pfaffians.
+    \begin{theorem}[T. Muir. 1960]
+        If $A$ is $2n\times 2n$ and skew symmetric then $\operatorname{Pf}(A)^2=\det(A)$
+    \end{theorem}
+    \begin{proof}
+        It is known that $P\in\mathbb R[x_1,\ldots,x_m]$ and $P(\mathbb R^m)=\{0\}\implies P\equiv 0$ (the proof is left as an exercise. Hint: Try to induct on the degree of $P$).
+        Thus it suffices to prove this theorem for all real matrices.
+        We have seen that we can write $A=QHQ^\top$ with $H$ the same as above, for some $Q$. 
+        Then, $\operatorname{Pf}(A)^2=\operatorname{Pf}(H)^2\det(Q)^2=\det(A)^2$ with the second last equality left as another exercise.
+    \end{proof}
+\end{frame}
+
+% =========================================
+% SECTION 4: Constructing The Matrix 
 % =========================================
 
 \section[construct]{Constructing the matrix}
 
 \begin{frame}
-    We first try to get a glimpse of the possible structure of $D$, only then rectifying our guess to the final matrix $D$ which will give us $\operatorname{Pf}(D)=|T(m,n)|$. 
-    The Pfaffian goes through all the permutations which could correspond to some tiling, but we want a way to filter out the \textit{bad} permutations.
-    A way to do this is by setting all the entries $D_{i,j}$ where $i,j$ can not be labels on a singular domino in some canonical permutation, to zero.
+    We first try to get a glimpse at the possible structure of $D$, only then rectifying our guess to the final matrix $D$ which will give us $\operatorname{Pf}(D)=|T(m,n)|$. 
+    The Pfaffian goes through all the permutations which \underline{could} correspond to some tiling, but we want a way to filter out the \textit{bad} permutations.
+    A way to do this is by setting the entries $D_{i,j}$ (with $i<j$, i.e. in the upper triangular half) where $i,j$ can not be labels on a singular domino in some canonical permutation, to zero.
     Then the only non zero entries could be :
     \begin{enumerate}
-        \item horizontal dominos: clearly the larger even label must lie exactly to the right of the smaller odd label, unless the odd label is on the rightmost edge, in which case it can not correspond to a domino and we set it to zero.
-        \item vertical dominos: here, the even label is similarly always directly above the smaller odd one, unless this odd one is on the topmost edge.
+        \item horizontal dominos $\rightarrow$ clearly the larger even label must lie exactly to the right of the smaller odd label, unless the odd label is on the rightmost edge, in which case it can not correspond to a domino and we set it to zero.
+        \item vertical dominos $\rightarrow$ here, the even label is similarly always directly above the smaller odd one, unless this odd one is on the topmost edge.
     \end{enumerate}
 \end{frame}
 
 \begin{frame}
-    Thus combining these with the definition of permutations we are interested in, we take the following guess at $D$, namely $D'$: the $(i,j)$-th entry is nonzero if 
+    Thus combining these with the definition of permutations we are interested in, we take the following guess at $D$, namely $D'$: the $(i,j)$-th entry ($i<j$ still, entries with $i>j$ are determined by skew symmetry) is nonzero if 
     \begin{itemize}
         \item $i$ is odd, $j=i+1$ and $m\nmid i$ (not on the right edge basically.)
         \item $j=i+m$ (directly above) and $i\leq mn-m$ (not on the topmost row).
     \end{itemize}
     Now if we make the entries which correspond to horizontal dominos $x$ and the vertical ones $y$ respectively, then
-    $$\prod_{i=1}^{mn/2}D_{\sigma(2i-1),\sigma(2i)}=
+    $$\prod_{i=1}^{mn/2}D'_{\sigma(2i-1),\sigma(2i)}=
     \begin{cases}
         x^{H(T)}y^{V(T)}\text{ if }\sigma\text{ corresponds to some tiling } $T$\\
         0\text{ otherwise} 
@@ -137,71 +202,6 @@
     where $V_k$ and is diagonal with $(V_k)_{ii}=(-1)^{i}$ and $H_k$ has all $1$s on the super and $-1$s on the sub diagonal respectively, every other entry being zero. 
     $V_k$ correspond to vertical dominos and $H_k$ to horizontal.
 \end{frame}
-% =========================================
-% SECTION 4: The Pfaffian
-% =========================================
-
-\section[pfaffian]{The Pfaffian}
-
-\begin{frame}
-    \begin{definition}[Pfaffian]
-        For a $2n\times 2n$ skew symmetric matrix $A$, the pfaffian is defined as
-        $$\operatorname{Pf}(A):=\frac{1}{2^nn!}\sum_{\sigma\in S_{2n}}\operatorname{sgn}(\sigma)\prod_{i=1}^na_{\sigma(2i-1),\sigma(2i)}$$
-    \end{definition}
-    However, there is a way to write the pfaffian with lesser terms. Let $\Pi$ be the set of partitions of $[2n]$ into pairs.
-    For such a partition $\pi=\{\{i_1,j_1\},\ldots,\{i_n,j_n\}\}$ where $i_1<i_2<i_3<\ldots$ and $i_k<j_k$ for all $k$, let $\sigma_\pi$ be the permutation $i_1j_1i_2j_2\ldots$.
-    With the notation above, we claim that
-    $$\operatorname{Pf}(A)=\sum_{\pi\in\Pi}\operatorname{sgn}(\sigma_\pi)\prod_{i=1}^na_{\sigma_\pi(2i-1),\sigma_\pi(2i)}$$
-\end{frame}
-\begin{frame}
-    For a proof, notice that when the pairs in the partition are permuted and the elements in each pair also permuted, these correspond to $2^nn!$ permutations and that the summand remains constant upon switching position of two elements in a pair as $A$ is skew symmetric and it stays constant over as the sign, being a homomorphism on $S_{2n}$, leads is multiplied by 
-    $$\operatorname{sgn}((2i-1,2j-1)(2i,2j))=\operatorname{sgn}((2i-1,2j-1))\cdot\operatorname{sgn}((2i,2j))$$
-    $$=(-1)\cdot(-1)=1$$
-    in cycle notation, when we switch the $i$-th and $j$-th pairs - making the summand stay constant all over these permutations and we are done.
-\end{frame}
-\begin{frame}
-    \begin{theorem}[spectral theorem for real skew symmetric matrices]
-        If $A$ is a $2n\times 2n$ real skew symmetric matrix then the spectrum is of form $\{\pm i\lambda_k\}_{1\leq k\leq n}$ and $A$ is orthogonally similar to a block diagonal matrix $H$ with diagonal entries being $H_1,\ldots,H_n$ with
-        \begin{center}
-            $H_k:=\begin{pmatrix}
-                0 & \lambda_k\\ -\lambda_k & 0
-            \end{pmatrix}$
-        \end{center}
-    \end{theorem}
-    \begin{proof}
-        The structure of the spectrum is a result from basic linear algebra. 
-        As skew symmetric matrices are normal we can diagonalise them into $D:=Q^{\top}AQ=\operatorname{diag}(i\lambda_1,-i\lambda_1,\ldots)$ with $Q$ orthogonal. Let,
-        \begin{center}
-            $P:=\frac{1}{2}\cdot\begin{pmatrix}
-            1 & 1 \\ i & -i
-        \end{pmatrix}$
-    \end{center}
-    \end{proof}
-\end{frame}
-\begin{frame}
-    \begin{proof}[(continued)]
-        This is an orthogonal matrix. Let $L=\operatorname{diag}(P,P,\ldots)$ be a $2n\times 2n$ block diagonal matrix, this is also orthogonal and we see that
-        $$L^\top HL =\operatorname{diag}(P^{\top},P^{\top},\ldots)\operatorname{diag}(H_1,H_2,\ldots)\operatorname{diag}(P,P,\ldots)$$
-        $$=\operatorname{diag}(P^\top H_1 P,P^\top H_2 P,\ldots)=\operatorname{diag}(\operatorname{diag}(i\lambda_1,-i\lambda_1),\ldots)=D$$
-        Thus, $A=Q^{\top}L^{\top}HLQ$ rearranging which we can conclude as the product of two orthogonal matrices is orthogonal.
-    \end{proof}
-    \begin{theorem}
-        For any $2n\times 2n$ skew symmetric matrix $A$ and arbitrary matrix $B$ we have, $\operatorname{Pf}(BAB^\top)=\operatorname{Pf}(A)$.
-    \end{theorem}
-\end{frame}
-\begin{frame}
-    For our use case however $B$ is invertible and this version of the theorem can be proved via considering $B$ to be a product of elementary matrices and using some of the determinant-like properties which can be found on wikipedia. 
-    Now we state the most important theorem we will use regarding pfaffians.
-    \begin{theorem}[T. Muir. 1960]
-        If $A$ is $2n\times 2n$ and skew symmetric then $\operatorname{Pf}(A)^2=\det(A)$
-    \end{theorem}
-    \begin{proof}
-        Show that $P\in\mathbb R[x_1,\ldots,x_m]$ and $P(\mathbb R^m)=\{0\}\implies P\equiv 0$ as an exercise.
-        Thus it suffices to prove this theorem for all real matrices.
-        We have seen that we can write $A=QHQ^\top$ with $H$ the same as above, for some $Q$. 
-        Then, $\operatorname{Pf}(A)^2=\operatorname{Pf}(H)^2\det(Q)^2=\det(A)^2$ with the second last equality left as another exercise.
-    \end{proof}
-\end{frame}
 
 % =========================================
 % SECTION 5: representing the matrix using kronecker products 
@@ -230,7 +230,8 @@ To get more information about the determinant of $D$, its natural to try to diag
 We try to diagonalise the $H_k$ in our expression by considering $\tilde{\Lambda}:=(U_n\otimes U_m)^{-1}D(U_n\otimes U_m)$, where $U_m$ hits the $H_m$ on the right term and $U_n$ the $H_n$ on the left. 
 By using the properties mentioned above we find that 
 $$\tilde{\Lambda}=(U_n\otimes U_m)^{-1}D(U_n\otimes U_m)=I_n\otimes x\Lambda_m+\Lambda_n\otimes yU_m^{-1}V_mU_m$$
-this is clearly in block diagonal form as $I_n,\Lambda_n$ are both diagonal, but we still have no clue about $U_m^{-1}V_mU_m.$
+this is clearly in block diagonal form as $I_n,\Lambda_n$ are both diagonal and of the same dimension. 
+We will now try to figure out what $U_m^{-1}V_mU_m$ is.
 \end{frame}
 \section[eval]{Evaluating $U_m^{-1}V_mU_m$}
 \begin{frame}
@@ -245,7 +246,7 @@ this is clearly in block diagonal form as $I_n,\Lambda_n$ are both diagonal, but
 \begin{frame}
     Calculating $V_mU_m$ is easy, but working with $U_m^{-1}$ probably not so much. But we can notice that,
     $$(V_mU_m)_{k,l}=(-1)^ki^k\sin\qty(\frac{\pi kl}{m+1})=(U_m)_{k,m+1-l}$$
-    with some trigonometry, what this tells us is that $V_mU_m=U_mJ_m$ where $J_m$ is the anti-diagonal identity matrix (what we get by flipping $I_m$ from left to right.) Thus, simplifying everything we get,
+    with some trigonometry, what this tells us is that $V_mU_m=U_mJ_m$ where $J_m$ is the anti-diagonal identity matrix (what we get by flipping $I_m$ along the horizontal axis.) Thus, simplifying everything we get,
     $$\tilde{\Lambda}=I_n\otimes x\Lambda_m+\Lambda_n\otimes yJ_m$$
     This is block diagonal with $m\times m$ blocks. The block with its bottom right entry being at the $(km,km)$-th position is thus
     $$x\Lambda_m+y\lambda^{(n)}_kJ_m$$
@@ -293,12 +294,13 @@ As $m$ is even, both the diagonals are \textit{supposed to miss each other.}
         &= \prod_{k=1}^n\prod_{j=1}^{m/2}\qty(4x^2\cos^2\frac{\pi j}{m+1}+4y^2\cos^2\frac{\pi k}{n+1})
     \end{align*}
     as $\cos(\pi-\theta)=-\cos\theta$.
-    And using Muir's result we can link all of this back to the Pfaffian $$\operatorname{Pf}(D)^2=\det(D)=\det(U_n\otimes U_m)\tilde{\Lambda}(U_n\otimes U_m)^{-1}=\det\tilde{\Lambda}$$
+    And using Muir's result we can link all of this back to the Pfaffian :
+    $$\operatorname{Pf}(D)^2=\det(D)=\det((U_n\otimes U_m)\tilde{\Lambda}(U_n\otimes U_m)^{-1})=\det\tilde{\Lambda}$$
 \end{frame}
 \begin{frame}
     Thus, using the result from section $3$ and this we get,
     \begin{align*} 
-        \sum_{\pi\in T(m,n)}x^{H(\pi)}y^{V(\pi)} &= \operatorname{Pf}(D) \\ &= \sqrt{\det\tilde{\Lambda}} \\ &= 2^{mn/2}\prod_{k=1}^n\prod_{j=1}^{m/2}\qty(\cos^2\frac{\pi j}{m+1}+\cos^2\frac{\pi k}{n+1})^{\frac{1}{2}}
+        \sum_{\pi\in T(m,n)}x^{H(\pi)}y^{V(\pi)} &= \operatorname{Pf}(D) \\ &= \sqrt{\det\tilde{\Lambda}} \\ &= 2^{mn/2}\prod_{k=1}^n\prod_{j=1}^{m/2}\qty(x^2\cos^2\frac{\pi j}{m+1}+y^2\cos^2\frac{\pi k}{n+1})^{\frac{1}{2}}
     \end{align*}
     and we are finally done!
 \end{frame}

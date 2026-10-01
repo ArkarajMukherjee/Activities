@@ -1,0 +1,159 @@
+\documentclass[12pt,english]{article}
+\usepackage{mypreamble,amsthm}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{definition}{Definition}[section]
+\title{\textbf{A Brief Introduction to Nets}}
+\author{banku}
+\begin{document}
+\maketitle
+\section*{Preliminaries}
+This article assumes familiarity with basic topology and undergraduate metric space theory. If something is \textit{italicized} then you can probably look it up on the go, although it is not advisable to look up \textit{all} the italicized terms. 
+\section*{Why do we need nets?}
+For the better part of the undergraduate curriculum, one barely has to leave the setting of metric spaces for serious work - most of the topology we do is over metric spaces. 
+But soon enough, the notion of distance becomes a luxury when working in things like
+\begin{enumerate}[label=$\ast$]
+    \item \textit{Frechet Spaces} 
+    \item \textit{Topological Groups}
+    \item \textit{Topological Vector Spaces}
+    \item \textit{Whatever the hell Zariski Topologies are...}
+    \item add more someonee
+\end{enumerate}
+There are numerous other situations where letting go of the metric and moving up the abstraction ladder is productive for us but I am not literate enough to list all of them here. 
+The bigger motivation is the utility they promise. 
+Sequences, as a topological tool are there mostly to save ink as in whatever you could prove with sequences - you can probably prove without! Many a times, when one has to deal with convoluted metrics, it is often easier to work with convergence of sequences than \textit{wrangling balls.} 
+For example, in the metric space setting (which are, \textit{Second Countable}) we have the following result. 
+\begin{theorem}
+    If $(X,\rho_1)$ and $(X,\rho_2)$ are two metric spaces then the following are equivalent : 
+    \begin{enumerate}[label=\alph*.]
+        \item They have the same Topology.
+        \item For all sequences $\{x_n\}$, $\rho_1(x_n,x)\to 0$ if and only if $\rho_2(x_n,x)\to 0$, i.e. convergence of sequences is equivalent with respect to both metrics.
+    \end{enumerate}
+\end{theorem}
+This is immensely useful at times. Some more well-known results are the equivalence of sequential continuity, compactness, convergence (of functional limits) and their usual counterparts (also worth mention is the fact that something is a limit point of a set iff there exists a sequence with terms in the set, unequal to said point, converging to it.) All of these break pretty easily for the more abstract topological spaces which are not always metrizeable (sometimes they are, see \textit{Uryshon's Metrizablity Theorem}.) 
+Now, just like the general saying goes for zorn's lemma : \textit{"If you can keep doing something over and over again, then you can apply zorn's lemma and conclude."} Something similar can be done regarding sequences, that is, if we can make the index arbitrarily more robust than the natural numbers then we can use them to generalise many such properties of sequences to arbitrary topological spaces. 
+\section*{Definitions}
+\begin{definition}[Directed Sets]
+    A \textit{Directed Set} is a set $A$ equippied with a \textit{Partial Order} $\gtrsim$ such that for all $\alpha,\beta\in A$ there exists $\gamma\in A$ with $\alpha,\beta\lesssim\gamma.$ 
+\end{definition}
+We should note that the first part of the definition is trivially motivated as we would naturally want to expand beyond linear orders but the second part is more subtle - which exists, in layman terms, to allow us to make "sequence-type arguements" of form "for all $N,N'$ we can find $M\geq N,N'$ and now..." which all of you should already be very familiar with. 
+\begin{definition}[Nets]
+    A net in a set $X$ is a mapping $\alpha\mapsto x_\alpha$ from some directed set $A$ into $X.$ 
+    We usually denote these by $\ipp{x_\alpha}_{\alpha\in A}$ but we may omit the indexing set and write $\ipp{x_\alpha}$ (other lowercase greek alphabet will be used to index these) if it does not create ambiguity. 
+\end{definition}
+
+For examples, it suffices to consider directed sets so consider the following (it is a good exercise to prove that the following are actually directed sets)
+\begin{enumerate}[label=\arabic*.]
+    \item The poset with the order relation being opposite off some well ordered poset. 
+    \item Any unbounded subset of $\bR.$
+    \item $\mP(S)$ with the inclusion order for any set $S.$
+    \item The set of all neighborhoods (for us these are sets containing some open set which in turn contain some specicif point, they needn't be open themselves.) of some point ordered by reverse inclusion i.e. $A\gtrsim B$ iff $B \subseteq A.$ (This one is somewhat important.) 
+    \item If $A,B$ are directed with partial orders $\geq_A,\geq_B$ respectvely then so is $A\times B$ with the induced dictionary order. 
+    \item The set of all partitions of an interval into subintervals ordered by \textit{mesh.} (We can use this to write riemann integrals as a limit!)
+\end{enumerate}
+Now lets see how the usual notions of sequences have been generalised to nets. 
+\begin{definition}
+    If $X$ is a topological space and $E \subseteq X$ some subset, then a net $\ipp{x_\alpha}_{\alpha\in A}$ is \textit{eventually in} $E$ if there exists some $\alpha_0\in A$ such that $\alpha\gtrsim\alpha_0$ implies $x_\alpha\in E.$ 
+    It is \textit{frequently in} $E$ if for all $\beta\in A$ there exists some $\alpha\in A$ such that $x_\alpha\in A.$ Now, it converges to some $x\in X$ if for all neighborhoods $U$ of $x$, it is eventually in $U$ and likewise it has $x$ as a cluster point (what we also call limit point) if it is frequently in $U.$
+\end{definition}
+
+We also have a notion of "subsequence" but this is defined in a much weaker way (we do not require injectivity of the index function) 
+\begin{definition}
+    Given a net $\ipp{x_\alpha}_{\alpha\in A}$, a subnet is a net $\ipp{y_\beta}_{\beta\in B}$ together with a map $\beta\mapsto\alpha_\beta$ (needn't be injective) from $A$ into $B$ such that for all $\alpha_0\in A$ there exists $\beta_0\in B$ such that $\beta\gtrsim_B\beta_0$ implies $\alpha_\beta\gtrsim_A\alpha_0$.
+\end{definition}
+Notice that all sequences are clearly nets but subnets of a sequence needn't be a subsequence. 
+We know that sequences converge iff all their subsequences converge and they do so to the same limit - we have a similar but noticeably diffrent criterion for nets too. 
+\begin{theorem}
+    A subeset $B$ of a directed set $A$ is called cofinal if for all $\alpha\in A$ there exists $\beta\in B$ such that $\beta\gtrsim\alpha$ and for any net $\ipp{x_\alpha}_{\alpha\in A}$ we can see that the inclusion map $B\rightarrow A$ makes $\ipp{x_\beta}_{\beta\in B}$ a subnet. Now, a net $\ipp{x_\alpha}_{\alpha\in A}$ converges to $x$ iff for all $B$ cofinal in $A$ we can find some $C$ cofinal in $B$ such that $\ipp{x_\gamma}_{\gamma\in C}$ converges to $x.$
+\end{theorem}
+
+The interested should already be pondering whether this "limit" of a net is actually unique and it turns out that this is a nontrivial question. 
+Infact, a topological space is Hausdorff iff all converging nets have unique limits and when it is unique we may denote convergence as 
+\[
+    \lim_{\longrightarrow_\alpha}x_\alpha=x\text{ or, }x_\alpha\longrightarrow x
+\]
+
+Let us now prove some more theorems concerning generelisations of sequence-type theorems to nets, starting with the limit (accumulation) point result.  
+\begin{theorem}
+If $X$ is a topological space, $E \subset X$, and $x \in X$, then $x$ is an accumulation point of $E$ iff there is a net in $E \setminus \{x\}$ that converges to $x$, and $x \in \overline{E}$ (the overline resembles closure) iff there is a net in $E$ that converges to $x$. 
+\end{theorem}
+\begin{proof}
+If $x$ is an accumulation point of $E$, let $\mN$ be the set of neighborhoods of $x$, directed by reverse inclusion. 
+For each $U \in \mN$, pick $x_U \in (U \setminus \{x\}) \cap E$. Then $x_U \to x$. Conversely, if $x_\alpha \in E \setminus \{x\}$ and $x_\alpha \to x$, then every punctured neighborhood of $x$ contains some $x_\alpha$, so $x$ is an accumulation point of $E$. Likewise, if $x_\alpha \to x$ where $x_\alpha \in E$, then $x \in \overline{E}$. The converse is left as an easy exercise. 
+\end{proof}
+This is the generelisation of sequential criterion for continuity. 
+\begin{theorem}
+    If $X$ and $Y$ are topological spaces and $f : X \to Y$, then $f$ is continuous at $x \in X$ iff for every net $\ipp{x_\alpha}$ converging to $x, \ipp{f(x_\alpha)}$ converges to $f(x)$. 
+\end{theorem}
+\begin{proof}
+    If $f$ is continuous at $x$ and $V$ is a neighborhood of $f(x)$, then $f^{-1}(V)$ is a neighborhood of $x$. Hence, if $x_\alpha \to x$ then $(x_\alpha)$ is eventually in $f^{-1}(V)$, so $\ipp{f(x_\alpha)}$ is eventually in $V$, and thus $f(x_\alpha) \to f(x)$. On the other hand, if $f$ is not continuous at $x$, there is a neighborhood $V$ of $f(x)$ such that $f^{-1}(V)$ is not a neighborhood of $x$, that is, $x \notin (f^{-1}(V))^\circ$ (the circle superscript is used to denote the interior), or equivalently, $x \in \overline{f^{-1}(V^c)}$. 
+By Proposition 4.18, there is a net $\langle x_\alpha \rangle$ in $f^{-1}(V^c)$ that converges to $x$. But then $f(x_\alpha) \notin V$, so $f(x_\alpha) \not\to f(x)$. 
+\end{proof}
+We know that something is a limit point of a sequence of a limit point iff there is a subsequence converging to it, this is perfectly generalised as follows: 
+\begin{theorem}
+If $\langle x_\alpha \rangle_{\alpha \in A}$ is a net in a topological space $X$, then $x \in X$ is a cluster point of $\langle x_\alpha \rangle$ iff $\langle x_\alpha \rangle$ has a subnet that converges to $x$. 
+\end{theorem}
+\begin{proof}
+    If $\ipp{y_\beta} = \ipp{x_{\alpha_\beta}}$ is a subnet converging to $x$ and $U$ is a neighborhood of $x$, choose $\beta_1 \in B$ such that $y_\beta \in U$ for $\beta \gtrsim \beta_1$. Also, given $\alpha \in A$, choose $\beta_2 \in B$ such that $\alpha_\beta \gtrsim \alpha$ for $\beta \gtrsim \beta_2$. 
+Then there exists $\beta \in B$ with $\beta \gtrsim \beta_1$ and $\beta \gtrsim \beta_2$, and we have $\alpha_\beta \gtrsim \alpha$ and $x_{\alpha_\beta} = y_\beta \in U$. Thus $\langle x_\alpha \rangle$ is frequently in $U$, so $x$ is a cluster point of $\langle x_\alpha \rangle$. 
+Conversely, if $x$ is a cluster point of $\langle x_\alpha \rangle$, let $\mN$ be the set of neighborhoods of $x$ and make $\mN \times A$ into a directed set by declaring that $(U, \alpha) \lesssim (U', \alpha')$ iff $U \supset U'$ and $\alpha \lesssim \alpha'$. 
+For each $(U, \gamma) \in \mN \times A$ we can choose $\alpha_{(U, \gamma)} \in A$ such that $\alpha_{(U, \gamma)} \gtrsim \gamma$ and $x_{\alpha_{(U, \gamma)}} \in U$. Then if $(U', \gamma') \gtrsim (U, \gamma)$ we have $\alpha_{(U', \gamma')} \gtrsim \gamma' \gtrsim \gamma$ and $x_{\alpha_{(U', \gamma')}} \in U' \subset U$, whence it follows that $(x_{\alpha_{(U, \gamma)}})$ is a subnet of $\langle x_\alpha \rangle$ that converges to $x$. 
+\end{proof}
+
+We saw at the beginning that convergence of sequences completely and uniquely determines the topology of a metric space, this is true when generalised to arbitrary topological spaces too and is extremely useful when trying to work with any space that has a convluted topology, for example consider Topological vector spaces with topology generated by a family of \textit{seminorms} $\{p_\alpha\}_{\alpha\in A}$, this topology is generated by sets of form : 
+\[
+    U_{x,\alpha,\epsilon}:= \qty{y\in X : p_\alpha(x-y)<\ep}
+\]
+but we can simply characterize the topology as the one where 
+\[
+    \lim_{\longrightarrow_\beta}x_\beta=x\iff\lim_{\longrightarrow_\beta}p_\alpha(x-x_\beta)=0\text{ forall }\alpha\in A
+\]
+infact this translation allows for an easy proof of various results such as the fact that the weakest topology where a collection of linear maps $\{T_\alpha\}$ on a normed linear space $(X,\norm{\cdot})$ is continuous is that generated by the family of seminorms $\{p_\alpha\}$ with $p_\alpha(x):=\norm{T_\alpha(x)}$, or more generally (in some sense), if $X$ has the weak topology generated by a family of functions $\mathcal F$ then 
+\[
+    \lim_{\longrightarrow_\beta}x_\beta=x\iff\lim_{\longrightarrow_\beta}f(x_\beta)=f(x)\text{ forall }f\in\mathcal F
+\]
+It is easy to keep giving use cases of nets so we will stop here (feel free to contact me for more applications!) and conclude with two theorems which are under the spotlight, first being the generalisation of the equivalence of sequential compactness and compactness (often referred to as Heine-Borel Compactness too) in metric spaces to arbitrary mtopological spaces.
+\begin{theorem}
+If $X$ is a topological space, the following are equivalent:
+\begin{enumerate}[label=\alph*.]
+    \item $X$ is compact.
+    \item Every net in $X$ has a cluster point.
+    \item Every net in $X$ has a convergent subnet.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+    The equivalence of (b) and (c) follows from Proposition Theorem 0.5. If $X$ is compact and $\ipp{x_\alpha}$ is a net in $X$, let $E_\alpha = \{x_\beta : \beta \gtrsim \alpha\}$. 
+    Since for any $\alpha, \beta \in A$ there exists $\gamma \in A$ with $\gamma \gtrsim \alpha$ and $\gamma \gtrsim \beta$, the family $\{E_\alpha\}_{\alpha \in A}$ has the finite intersection property, so by the \textit{Finite Intersection Property(FIP)}, $\bigcap_{\alpha \in A} \overline{E_\alpha} \neq \emptyset$. 
+    If $x \in \bigcap_{\alpha \in A} \overline{E_\alpha}$ and $U$ is a neighborhood of $x$, then $U$ intersects each $E_\alpha$, which means that $\ipp{x_\alpha}$ is frequently in $U$, so $x$ is a cluster point of $\ipp{x_\alpha}$. 
+    On the other hand, if $X$ is not compact, let $\{U_\beta\}_{\beta \in B}$ be an open cover of $X$ with no finite subcover. 
+    Let $\mA$ be the collection of finite subsets of $B$, directed by inclusion, and for each $A \in \mA$ let $x_A$ be a point in $(\bigcup_{\beta \in A} U_\beta)^c$. 
+    Then $\ipp{x_A}_{A \in \mA}$ is a net with no cluster point. 
+    Indeed, if $x \in X$, choose $\beta \in B$ with $x \in U_\beta$. If $A \in \mA$ and $A \gtrsim \{\beta\}$ then $x_A \notin U_\beta$, so $x$ is not a cluster point of $\ipp{x_A}$.
+\end{proof}
+And we end with a proof of Tychonoff's celebrated compactness theorem, but using nets which was given by Chernofff.
+To prepare for it, we introduce some notation. Recall that an element $x$ of $X = \prod_{\alpha \in A} X_\alpha$ is, strictly speaking, a mapping from $A$ into $\bigcup_{\alpha \in A} X_\alpha$; namely, $x(\alpha) \in X_\alpha$ is the $\alpha$-th coordinate of $x$, which we generally denote by $\pi_\alpha(x)$. If $B \subset A$, there is a natural map $\pi_B : X \to \prod_{\alpha \in B} X_\alpha$; namely, $\pi_B(x)$ is the restriction of the map $x$ to $B$. (In particular, $\pi_{\{\alpha\}}$ is essentially identical to $\pi_\alpha$, and we shall not distinguish between them.) 
+If $p \in \prod_{\alpha \in B} X_\alpha$ and $q \in \prod_{\alpha \in C} X_\alpha$, we shall say that $q$ is an extension of $p$ if $q$ extends $p$ as a mapping, that is, if $B \subset C$ and $p(\alpha) = q(\alpha)$ for $\alpha \in B$.
+\begin{theorem}
+If $\{X_\alpha\}_{\alpha \in A}$ is any family of compact topological spaces, then $X = \prod_{\alpha \in A} X_\alpha$ (with the product topology) is compact.
+\end{theorem}
+\begin{proof}
+By Theorem 0.6, it is enough to show that any net $\ipp{ x_i }_{i \in I}$ in $X$ has a cluster point. 
+We shall do this by examining cluster points of the projected nets $\ipp{ \pi_B(x_i) }$ in the subproducts of $X$. To wit, define the set of partial cluster points
+\[
+\mP = \bigcup_{B \subset A} \left\{ p \in \prod_{\alpha \in B} X_\alpha : p \text{ is a cluster point of } \ipp{ \pi_B(x_i) } \right\}.
+\]
+Here, each element $p \in \mP$ is a partial cluster point defined on a subproduct indexed by a coordinate subset $B \subset A$. 
+The set $\mP$ is nonempty, because each space $X_\alpha$ is compact and thus every single-coordinate projection $\ipp{ \pi_{\{\alpha\}}(x_i) }$ possesses a cluster point (corresponding to the case $B = \{\alpha\}$).
+Moreover, $\mP$ is partially ordered by extension: for $p \in \prod_{\alpha \in B} X_\alpha$ and $q \in \prod_{\alpha \in C} X_\alpha$, we write $p \le q$ if $q$ extends $p$ as a function (that is, $B \subset C$ and $q|_{B} = p$).
+Suppose that $\{p_l : l \in L\}$ is a linearly ordered chain in $\mP$, where each $p_l \in \prod_{\alpha \in B_l} X_\alpha$. 
+Let $B^* = \bigcup_{l \in L} B_l$ be the combined coordinate set, and let $p^*$ be the unique, well-defined common extension in $\prod_{\alpha \in B^*} X_\alpha$ given by $p^*(\alpha) = p_l(\alpha)$ whenever $\alpha \in B_l$. 
+We claim that $p^* \in \mP$. Indeed, from the definition of the product topology, any basic neighborhood of $p^*$ contains a set of the form $\prod_{\alpha \in B^*} U_\alpha$, where each $U_\alpha$ is open in $X_\alpha$ and $U_\alpha = X_\alpha$ for all but finitely many indices $\alpha_1, \dots, \alpha_n \in B^*$. Each of these finitely many indices belongs to some $B_l$, so by linearity of the ordering on $L$, they all belong to a single index set $B_l$. 
+But then $\prod_{\alpha \in B_l} U_\alpha$ is a neighborhood of $p_l$, so the projected net $\ipp{ \pi_{B_l}(x_i) }$ is frequently in $\prod_{\alpha \in B_l} U_\alpha$; hence $\ipp{ \pi_{B^*}(x_i) }$ is frequently in $\prod_{\alpha \in B^*} U_\alpha$, showing that $p^*$ is indeed a cluster point of $\ipp{ \pi_{B^*}(x_i) }$. 
+Therefore $p^* \in \mP$, and $p^*$ serves as an upper bound for $\{p_l\}$ in $\mP$.
+
+By Zorn's lemma, $\mP$ contains a maximal element $\overline{p} \in \prod_{\alpha \in \overline{B}} X_\alpha$ defined on a maximal domain $\overline{B} \subset A$. We claim that $\overline{B} = A$. If not, pick an unassigned coordinate $\gamma \in A \setminus \overline{B}$. By Proposition 4.20, since $\overline{p}$ is a cluster point of $\ipp{ \pi_{\overline{B}}(x_i) }$, there is a subnet index map $j \mapsto i(j)$ such that the subnet $\{\pi_{\overline{B}}(x_{i(j)})\}_{j \in J}$ converges to $\overline{p}$. Since $X_\gamma$ is compact, the projected net $\ipp{ \pi_\gamma(x_{i(j)}) }$ has a further convergent subnet indexed by $k \mapsto j(k)$, so $\ipp{ \pi_\gamma(x_{i(j(k))}) }_{k \in K}$ converges to some $p_\gamma \in X_\gamma$.
+
+Let $q$ be the unique element of $\prod_{\alpha \in \overline{B} \cup \{\gamma\}} X_\alpha$ that extends both $\overline{p}$ on $\overline{B}$ and $p_\gamma$ on $\{\gamma\}$. Then the combined net $\ipp{ \pi_{\overline{B} \cup \{\gamma\}}(x_{i(j(k))}) }_{k \in K}$ converges to $q$, which implies $q$ is a cluster point of $\ipp{ \pi_{\overline{B} \cup \{\gamma\}}(x_i) }$. Thus $q \in \mP$, directly contradicting the maximality of $\overline{p}$.
+
+Therefore, $\overline{B} = A$, which means $\overline{p}$ is a full cluster point of the net $\ipp{ x_i }$ in $X$, completing the proof.
+\end{proof}
+\end{document}

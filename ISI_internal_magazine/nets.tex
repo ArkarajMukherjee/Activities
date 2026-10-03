@@ -3,7 +3,7 @@
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{definition}{Definition}[section]
 \title{\textbf{A Brief Introduction to Nets}}
-\author{banku}
+\author{Arkaraj Mukherjee}
 \begin{document}
 \maketitle
 \section*{Preliminaries}
@@ -15,8 +15,7 @@ But soon enough, the notion of distance becomes a luxury when working in things 
     \item \textit{Frechet Spaces} 
     \item \textit{Topological Groups}
     \item \textit{Topological Vector Spaces}
-    \item \textit{Whatever the hell Zariski Topologies are...}
-    \item add more someonee
+    \item \textit{Zariski Topology}
 \end{enumerate}
 There are numerous other situations where letting go of the metric and moving up the abstraction ladder is productive for us but I am not literate enough to list all of them here. 
 The bigger motivation is the utility they promise. 
@@ -53,12 +52,12 @@ For examples, it suffices to consider directed sets so consider the following (i
 Now lets see how the usual notions of sequences have been generalised to nets. 
 \begin{definition}
     If $X$ is a topological space and $E \subseteq X$ some subset, then a net $\ipp{x_\alpha}_{\alpha\in A}$ is \textit{eventually in} $E$ if there exists some $\alpha_0\in A$ such that $\alpha\gtrsim\alpha_0$ implies $x_\alpha\in E.$ 
-    It is \textit{frequently in} $E$ if for all $\beta\in A$ there exists some $\alpha\in A$ such that $x_\alpha\in A.$ Now, it converges to some $x\in X$ if for all neighborhoods $U$ of $x$, it is eventually in $U$ and likewise it has $x$ as a cluster point (what we also call limit point) if it is frequently in $U.$
+    It is \textit{frequently in} $E$ if for all $\beta\in A$ there exists some $\alpha\in A$ with $\alpha\gtrsim\beta$ such that $x_\alpha\in A.$ Now, it converges to some $x\in X$ if for all neighborhoods $U$ of $x$, it is eventually in $U$ and likewise it has $x$ as a cluster point (what we also call limit point) if it is frequently in $U.$
 \end{definition}
 
 We also have a notion of "subsequence" but this is defined in a much weaker way (we do not require injectivity of the index function) 
 \begin{definition}
-    Given a net $\ipp{x_\alpha}_{\alpha\in A}$, a subnet is a net $\ipp{y_\beta}_{\beta\in B}$ together with a map $\beta\mapsto\alpha_\beta$ (needn't be injective) from $A$ into $B$ such that for all $\alpha_0\in A$ there exists $\beta_0\in B$ such that $\beta\gtrsim_B\beta_0$ implies $\alpha_\beta\gtrsim_A\alpha_0$.
+    Given a net $\ipp{x_\alpha}_{\alpha\in A}$, a subnet is a net $\ipp{y_\beta}_{\beta\in B}$ together with a map $\beta\mapsto\alpha_\beta$ (needn't be injective) from $B$ into $A$ such that for all $\alpha_0\in A$ there exists $\beta_0\in B$ such that $\beta\gtrsim_B\beta_0$ implies $\alpha_\beta\gtrsim_A\alpha_0$.
 \end{definition}
 Notice that all sequences are clearly nets but subnets of a sequence needn't be a subsequence. 
 We know that sequences converge iff all their subsequences converge and they do so to the same limit - we have a similar but noticeably diffrent criterion for nets too. 
@@ -86,7 +85,7 @@ This is the generelisation of sequential criterion for continuity.
 \end{theorem}
 \begin{proof}
     If $f$ is continuous at $x$ and $V$ is a neighborhood of $f(x)$, then $f^{-1}(V)$ is a neighborhood of $x$. Hence, if $x_\alpha \to x$ then $(x_\alpha)$ is eventually in $f^{-1}(V)$, so $\ipp{f(x_\alpha)}$ is eventually in $V$, and thus $f(x_\alpha) \to f(x)$. On the other hand, if $f$ is not continuous at $x$, there is a neighborhood $V$ of $f(x)$ such that $f^{-1}(V)$ is not a neighborhood of $x$, that is, $x \notin (f^{-1}(V))^\circ$ (the circle superscript is used to denote the interior), or equivalently, $x \in \overline{f^{-1}(V^c)}$. 
-By Proposition 4.18, there is a net $\langle x_\alpha \rangle$ in $f^{-1}(V^c)$ that converges to $x$. But then $f(x_\alpha) \notin V$, so $f(x_\alpha) \not\to f(x)$. 
+By Proposition Theorem 0.3 there is a net $\langle x_\alpha \rangle$ in $f^{-1}(V^c)$ that converges to $x$. But then $f(x_\alpha) \notin V$, so $f(x_\alpha) \not\to f(x)$. 
 \end{proof}
 We know that something is a limit point of a sequence of a limit point iff there is a subsequence converging to it, this is perfectly generalised as follows: 
 \begin{theorem}
@@ -150,7 +149,7 @@ We claim that $p^* \in \mP$. Indeed, from the definition of the product topology
 But then $\prod_{\alpha \in B_l} U_\alpha$ is a neighborhood of $p_l$, so the projected net $\ipp{ \pi_{B_l}(x_i) }$ is frequently in $\prod_{\alpha \in B_l} U_\alpha$; hence $\ipp{ \pi_{B^*}(x_i) }$ is frequently in $\prod_{\alpha \in B^*} U_\alpha$, showing that $p^*$ is indeed a cluster point of $\ipp{ \pi_{B^*}(x_i) }$. 
 Therefore $p^* \in \mP$, and $p^*$ serves as an upper bound for $\{p_l\}$ in $\mP$.
 
-By Zorn's lemma, $\mP$ contains a maximal element $\overline{p} \in \prod_{\alpha \in \overline{B}} X_\alpha$ defined on a maximal domain $\overline{B} \subset A$. We claim that $\overline{B} = A$. If not, pick an unassigned coordinate $\gamma \in A \setminus \overline{B}$. By Proposition 4.20, since $\overline{p}$ is a cluster point of $\ipp{ \pi_{\overline{B}}(x_i) }$, there is a subnet index map $j \mapsto i(j)$ such that the subnet $\{\pi_{\overline{B}}(x_{i(j)})\}_{j \in J}$ converges to $\overline{p}$. Since $X_\gamma$ is compact, the projected net $\ipp{ \pi_\gamma(x_{i(j)}) }$ has a further convergent subnet indexed by $k \mapsto j(k)$, so $\ipp{ \pi_\gamma(x_{i(j(k))}) }_{k \in K}$ converges to some $p_\gamma \in X_\gamma$.
+By Zorn's lemma, $\mP$ contains a maximal element $\overline{p} \in \prod_{\alpha \in \overline{B}} X_\alpha$ defined on a maximal domain $\overline{B} \subset A$. We claim that $\overline{B} = A$. If not, pick an unassigned coordinate $\gamma \in A \setminus \overline{B}$. By Proposition Theorem 0.5 since $\overline{p}$ is a cluster point of $\ipp{ \pi_{\overline{B}}(x_i) }$, there is a subnet index map $j \mapsto i(j)$ such that the subnet $\{\pi_{\overline{B}}(x_{i(j)})\}_{j \in J}$ converges to $\overline{p}$. Since $X_\gamma$ is compact, the projected net $\ipp{ \pi_\gamma(x_{i(j)}) }$ has a further convergent subnet indexed by $k \mapsto j(k)$, so $\ipp{ \pi_\gamma(x_{i(j(k))}) }_{k \in K}$ converges to some $p_\gamma \in X_\gamma$.
 
 Let $q$ be the unique element of $\prod_{\alpha \in \overline{B} \cup \{\gamma\}} X_\alpha$ that extends both $\overline{p}$ on $\overline{B}$ and $p_\gamma$ on $\{\gamma\}$. Then the combined net $\ipp{ \pi_{\overline{B} \cup \{\gamma\}}(x_{i(j(k))}) }_{k \in K}$ converges to $q$, which implies $q$ is a cluster point of $\ipp{ \pi_{\overline{B} \cup \{\gamma\}}(x_i) }$. Thus $q \in \mP$, directly contradicting the maximality of $\overline{p}$.
 
